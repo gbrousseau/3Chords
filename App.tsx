@@ -109,7 +109,7 @@ const SubscriptionScreen = ({ navigation }: { navigation: StackNavigationProp<Ro
   SubscriptionCongratsScreen:
   After the user selects a subscription, display a congratulatory message (or video) to affirm their choice.
 */
-import { StackScreenProps } from '@react-navigation/stack';
+// import { StackScreenProps } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 
 type SubscriptionCongratsScreenProps = {
@@ -209,7 +209,7 @@ export default function App() {
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
         <Stack.Screen name="Subscription" component={SubscriptionScreen} />
-        <Stack.Screen name="SubscriptionCongrats" component={SubscriptionCongratsScreen} />
+        {/* <Stack.Screen name="SubscriptionCongrats" component={SubscriptionCongratsScreen} /> */}
         <Stack.Screen name="ProfileSetup" component={ProfileSetupScreen} />
         <Stack.Screen name="AppHome" component={AppHomeScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
