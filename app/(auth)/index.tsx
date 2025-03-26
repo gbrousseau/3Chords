@@ -1,9 +1,9 @@
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Link, router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
-import { useEffect } from 'react';
 import { Mail } from 'lucide-react-native';
 
 WebBrowser.maybeCompleteAuthSession();

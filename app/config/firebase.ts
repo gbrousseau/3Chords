@@ -1,26 +1,23 @@
-import firebase from '@react-native-firebase/app';
+import { initializeApp } from '@react-native-firebase/app';
 import storage from '@react-native-firebase/storage';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
 // Your Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCJt8ianq3Mocuylsum4NhFmufe0-OwhEw",
-  authDomain: "chords-90522.firebaseapp.com",
-  projectId: "chords-90522",
-  storageBucket: "chords-90522.firebasestorage.app",
-  messagingSenderId: "85339006592",
-  appId: "1:85339006592:web:050a8d0d97da95c5bc2865",
-  measurementId: "G-8PY67P9LXR"
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID"
 };
 
-// Initialize Firebase if it hasn't been initialized yet
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
+// Initialize Firebase
+initializeApp(firebaseConfig);
 
 // Export the native Firebase instances
-export const nativeFirebase = firebase;
+export const nativeFirebase = firebaseConfig;
 export const nativeStorage = storage;
 export const nativeAuth = auth;
 export const nativeFirestore = firestore;
@@ -39,7 +36,7 @@ export const webStorage = {
 
 // Export everything
 export {
-  firebase,
+  firebaseConfig,
   storage,
   auth,
   firestore,

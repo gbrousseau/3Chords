@@ -47,4 +47,10 @@ export const updateUserProfile = async (userId: string, data: any) => {
     console.error('Error updating user profile:', error);
     return false;
   }
+};
+
+export default {
+  createUserProfile,
+  getUserProfile,
+  updateUserProfile
 }; 

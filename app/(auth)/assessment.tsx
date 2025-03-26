@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TextInput, Pressable, Alert } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useAuthContext } from '../context/AuthContext';
@@ -203,9 +203,9 @@ export default function AssessmentScreen() {
   const toggleService = (service: string) => {
     if (isReadOnly) return;
     
-    setSelectedServices(prev => {
+    setSelectedServices((prev: string[]) => {
       if (prev.includes(service)) {
-        return prev.filter(s => s !== service);
+        return prev.filter((s: string) => s !== service);
       }
       return [...prev, service];
     });

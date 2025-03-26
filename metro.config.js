@@ -3,14 +3,18 @@ const { getDefaultConfig } = require('expo/metro-config');
 const path = require('path');
 
 /** @type {import('expo/metro-config').MetroConfig} */
-const config = getDefaultConfig(__dirname, {
-  // [Web-only]: Enables CSS support in Metro.
-  isCSSEnabled: true,
-});
+const config = getDefaultConfig(__dirname);
 
-// Add additional module resolution
-config.resolver.sourceExts = ['jsx', 'js', 'ts', 'tsx', 'json', 'mjs'];
-config.resolver.assetExts = ['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'ttf'];
+// Ensure proper resolution of React Native modules
+config.resolver = {
+  ...config.resolver,
+  sourceExts: ['jsx', 'js', 'ts', 'tsx', 'json', 'cjs', 'mjs'],
+  assetExts: ['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'ttf'],
+  resolverMainFields: ['react-native', 'browser', 'main'],
+  platforms: ['ios', 'android', 'web'],
+  // Ensure node_modules are included in the lookup
+  nodeModulesPaths: [path.resolve(__dirname, 'node_modules')]
+};
 
 // Block Node.js-specific Firebase modules
 config.resolver.blockList = [

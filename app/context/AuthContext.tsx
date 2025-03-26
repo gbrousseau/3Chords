@@ -3,6 +3,10 @@ import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import * as Google from 'expo-auth-session/providers/google';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import { Platform } from 'react-native';
+import * as WebBrowser from 'expo-web-browser';
+
+// Initialize WebBrowser for OAuth
+WebBrowser.maybeCompleteAuthSession();
 
 interface AuthContextType {
   user: FirebaseAuthTypes.User | null;
@@ -26,9 +30,32 @@ const AuthContext = createContext<AuthContextType>({
   signInWithApple: async () => {},
 });
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
+function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    androidClientId: '85339006592-e3gltpi9kunsa2mfff3sam9elm1p3a2d.apps.googleusercontent.com',
+    iosClientId: '85339006592-oe2n2n96tps7j6nve4elsqq0ah488rso.apps.googleusercontent.com',
+    webClientId: '85339006592-e3gltpi9kunsa2mfff3sam9elm1p3a2d.apps.googleusercontent.com',
+    redirectUri: Platform.select({
+      ios: 'com.yourcompany.threechords:/oauth2redirect/google',
+      android: 'com.yourcompany.threechords:/oauth2redirect/google'
+    })
+  });
+
+  useEffect(() => {
+    if (response?.type === 'success') {
+      const { id_token } = response.params;
+      const credential = auth.GoogleAuthProvider.credential(id_token);
+      auth().signInWithCredential(credential)
+        .catch(error => {
+          console.error('Firebase credential error:', error);
+        });
+    } else if (response?.type === 'error') {
+      console.error('Google Sign-In Error:', response.error);
+    }
+  }, [response]);
 
   useEffect(() => {
     const unsubscribe = auth().onAuthStateChanged((user) => {
@@ -73,19 +100,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signInWithGoogle = async () => {
     try {
-      const [request, response, promptAsync] = Google.useAuthRequest({
-        androidClientId: 'YOUR_ANDROID_CLIENT_ID',
-        iosClientId: 'YOUR_IOS_CLIENT_ID',
-        webClientId: 'YOUR_WEB_CLIENT_ID',
-      });
-
       const result = await promptAsync();
-      if (result?.type === 'success') {
-        const { id_token } = result.params;
-        const credential = auth.GoogleAuthProvider.credential(id_token);
-        await auth().signInWithCredential(credential);
+      if (result.type === 'error') {
+        console.error('Prompt Error:', result.error);
       }
     } catch (error) {
+      console.error('Google Sign-In Error:', error);
       throw error;
     }
   };
@@ -134,4 +154,7 @@ export function useAuthContext() {
     throw new Error('useAuthContext must be used within an AuthProvider');
   }
   return context;
-} 
+}
+
+export { AuthProvider };
+export default AuthProvider; 

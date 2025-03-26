@@ -16,4 +16,6 @@ export function useAuth() {
   }, []);
 
   return { user, loading };
-} 
+}
+
+export default useAuth; 
