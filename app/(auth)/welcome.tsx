@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
-import { Video } from 'expo-av';
+import { Video, ResizeMode } from 'expo-av';
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ArrowLeft } from 'lucide-react-native';
@@ -38,7 +38,7 @@ export default function WelcomeScreen() {
             source={{ uri: 'https://assets.mixkit.co/videos/preview/mixkit-woman-practicing-yoga-at-sunset-4796-large.mp4' }}
             style={styles.video}
             useNativeControls
-            resizeMode="cover"
+            resizeMode={ResizeMode.COVER}
             isLooping
           />
         </View>

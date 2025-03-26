@@ -29,7 +29,7 @@ export default function RootLayout() {
   useEffect(() => {
     initializeStripe();
   }, []);
-
+  
   // If fonts failed to load, we'll still render the app with system fonts
   if (!fontsLoaded && !fontsError) {
     return null;

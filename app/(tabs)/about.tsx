@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { Text, StyleSheet, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 export default function AboutScreen() {
@@ -9,7 +9,7 @@ export default function AboutScreen() {
     >
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.content}>
         <Text style={styles.title}>About Us</Text>
-        
+
         <Text style={styles.paragraph}>
           Welcome to 3 Cords Coaching, where extraordinary growth begins.
         </Text>

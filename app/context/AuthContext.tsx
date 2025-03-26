@@ -1,12 +1,11 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut as firebaseSignOut, sendPasswordResetEmail, GoogleAuthProvider, signInWithCredential, OAuthProvider } from 'firebase/auth';
-import { auth } from '../config/firebase';
+import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import * as Google from 'expo-auth-session/providers/google';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import { Platform } from 'react-native';
 
 interface AuthContextType {
-  user: User | null;
+  user: FirebaseAuthTypes.User | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string) => Promise<void>;
@@ -28,11 +27,11 @@ const AuthContext = createContext<AuthContextType>({
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    const unsubscribe = auth().onAuthStateChanged((user) => {
       setUser(user);
       setLoading(false);
     });
@@ -42,7 +41,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signIn = async (email: string, password: string) => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await auth().signInWithEmailAndPassword(email, password);
     } catch (error) {
       throw error;
     }
@@ -50,7 +49,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signUp = async (email: string, password: string) => {
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      await auth().createUserWithEmailAndPassword(email, password);
     } catch (error) {
       throw error;
     }
@@ -58,7 +57,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signOut = async () => {
     try {
-      await firebaseSignOut(auth);
+      await auth().signOut();
     } catch (error) {
       throw error;
     }
@@ -66,7 +65,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const resetPassword = async (email: string) => {
     try {
-      await sendPasswordResetEmail(auth, email);
+      await auth().sendPasswordResetEmail(email);
     } catch (error) {
       throw error;
     }
@@ -83,8 +82,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const result = await promptAsync();
       if (result?.type === 'success') {
         const { id_token } = result.params;
-        const credential = GoogleAuthProvider.credential(id_token);
-        await signInWithCredential(auth, credential);
+        const credential = auth.GoogleAuthProvider.credential(id_token);
+        await auth().signInWithCredential(credential);
       }
     } catch (error) {
       throw error;
@@ -102,12 +101,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         });
 
         const { identityToken } = credential;
-        const provider = new OAuthProvider('apple.com');
-        const oAuthCredential = provider.credential({
-          idToken: identityToken!,
-        });
-
-        await signInWithCredential(auth, oAuthCredential);
+        const provider = new auth.OAuthProvider('apple.com');
+        const oAuthCredential = provider.credential(identityToken!);
+        await auth().signInWithCredential(oAuthCredential);
       }
     } catch (error) {
       throw error;

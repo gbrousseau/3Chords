@@ -1,5 +1,4 @@
-import { doc, setDoc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
-import { db } from '../config/firebase';
+import firestore from '@react-native-firebase/firestore';
 import { UserProfile, AssessmentData } from '../types/user';
 
 export async function createUserProfile(
@@ -14,33 +13,38 @@ export async function createUserProfile(
     updatedAt: new Date(),
   };
 
-  await setDoc(doc(db, 'users', userId), userProfile);
+  await firestore().doc(`users/${userId}`).set({
+    ...userProfile,
+    createdAt: firestore.Timestamp.fromDate(userProfile.createdAt),
+    updatedAt: firestore.Timestamp.fromDate(userProfile.updatedAt),
+  });
 }
 
 export async function getUserProfile(userId: string): Promise<UserProfile | null> {
-  const docRef = doc(db, 'users', userId);
-  const docSnap = await getDoc(docRef);
+  const docSnap = await firestore().doc(`users/${userId}`).get();
 
-  if (docSnap.exists()) {
+  if (docSnap.exists) {
     const data = docSnap.data();
     return {
       id: docSnap.id,
       ...data,
-      createdAt: data.createdAt?.toDate(),
-      updatedAt: data.updatedAt?.toDate(),
+      createdAt: data?.createdAt?.toDate(),
+      updatedAt: data?.updatedAt?.toDate(),
     } as UserProfile;
   }
 
   return null;
 }
 
-export async function updateUserProfile(
-  userId: string,
-  assessmentData: AssessmentData
-): Promise<void> {
-  const docRef = doc(db, 'users', userId);
-  await updateDoc(docRef, {
-    ...assessmentData,
-    updatedAt: serverTimestamp(),
-  });
-} 
+export const updateUserProfile = async (userId: string, data: any) => {
+  try {
+    await firestore().doc(`users/${userId}`).update({
+      ...data,
+      updatedAt: firestore.FieldValue.serverTimestamp()
+    });
+    return true;
+  } catch (error) {
+    console.error('Error updating user profile:', error);
+    return false;
+  }
+}; 

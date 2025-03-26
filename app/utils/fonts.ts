@@ -58,20 +58,20 @@ export const getFontFamily = (fontsLoaded: boolean, weight: FontWeight = 'regula
 export const getPlatformFontFamily = (fontsLoaded: boolean, weight: FontWeight = 'regular', type: FontType = 'inter') => {
   try {
     const fontFamily = getFontFamily(fontsLoaded, weight, type);
-    
+
     // On Android, we need to handle some special cases
     if (Platform.OS === 'android') {
       // If fonts failed to load, use system font
       if (!fontsLoaded) {
         return 'System';
       }
-      
+
       // For vector icons, use the system font
       if (type === 'vector') {
         return 'System';
       }
     }
-    
+
     return fontFamily;
   } catch (error) {
     console.warn('Platform font family resolution error:', error);

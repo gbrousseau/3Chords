@@ -34,8 +34,8 @@ export default function EventsScreen() {
   const isToday = (date: Date): boolean => {
     const today = new Date();
     return date.getDate() === today.getDate() &&
-           date.getMonth() === today.getMonth() &&
-           date.getFullYear() === today.getFullYear();
+      date.getMonth() === today.getMonth() &&
+      date.getFullYear() === today.getFullYear();
   };
 
   const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));

@@ -4,17 +4,16 @@ import { LinearGradient } from 'expo-linear-gradient';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import { useEffect } from 'react';
-import { Github, Mail } from 'lucide-react-native';
+import { Mail } from 'lucide-react-native';
 
 WebBrowser.maybeCompleteAuthSession();
 
 export default function AuthScreen() {
   const [googleRequest, googleResponse, googlePromptAsync] =
     Google.useAuthRequest({
-      androidClientId: 'REPLACE_WITH_YOUR_ANDROID_CLIENT_ID',
-      iosClientId: 'REPLACE_WITH_YOUR_IOS_CLIENT_ID',
-      webClientId: 'REPLACE_WITH_YOUR_WEB_CLIENT_ID',
-      expoClientId: 'REPLACE_WITH_YOUR_EXPO_CLIENT_ID',
+      androidClientId: '85339006592-e3gltpi9kunsa2mfff3sam9elm1p3a2d.apps.googleusercontent.com',
+      iosClientId: '85339006592-oe2n2n96tps7j6nve4elsqq0ah488rso.apps.googleusercontent.com',
+      webClientId: '85339006592-e3gltpi9kunsa2mfff3sam9elm1p3a2d.apps.googleusercontent.com'
     });
 
   useEffect(() => {

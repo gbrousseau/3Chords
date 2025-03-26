@@ -5,7 +5,6 @@ import { useAuthContext } from '../context/AuthContext';
 import { createUserProfile, getUserProfile, updateUserProfile } from '../services/userProfile';
 import { AssessmentData } from '../types/user';
 import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useAppFonts, getPlatformFontFamily, createSafeStyles } from '../utils/fonts';
 
 const coachingServices = [

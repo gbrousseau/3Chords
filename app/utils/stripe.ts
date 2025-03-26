@@ -1,7 +1,7 @@
 import { initStripe } from '@stripe/stripe-react-native';
 
 // Replace this with your actual Stripe publishable key
-export const STRIPE_PUBLISHABLE_KEY = 'pk_test_YOUR_PUBLISHABLE_KEY';
+export const STRIPE_PUBLISHABLE_KEY = 'pk_test_51R4HScEISfgSYUha345kfZnomfWyNiayfhldBSfVBJxrHGb7ej1T41Uc5WhRm6vpy5b9so3f9cuYByK1cU9zXx3C00wPHFd0jg';
 
 export const initializeStripe = async () => {
   try {

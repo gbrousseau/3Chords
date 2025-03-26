@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { Chrome as Home, MessageSquare, Calendar, Users, Settings } from 'lucide-react-native';
+import { Home, MessageSquare, Calendar, Users, Settings } from 'lucide-react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
 export default function TabLayout() {

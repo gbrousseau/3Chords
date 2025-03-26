@@ -4,7 +4,7 @@ import { Link } from 'expo-router';
 import { BookOpen, Calendar, Clock, FileText, CircleHelp as HelpCircle, Info, MessageSquare, Mic, Search, Star, Target, Users, Video, Edit2 } from 'lucide-react-native';
 
 export default function HomeScreen() {
-  const [searchQuery, setSearchQuery] = useState('');
+  //const [searchQuery, setSearchQuery] = useState('');
 
   return (
     <ScrollView style={styles.container}>
