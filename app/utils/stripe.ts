@@ -1,7 +1,7 @@
 import { initStripe } from '@stripe/stripe-react-native';
 
-// Replace with your Stripe publishable key
-export const STRIPE_PUBLISHABLE_KEY = 'your_publishable_key';
+// Replace this with your actual Stripe publishable key
+export const STRIPE_PUBLISHABLE_KEY = 'pk_test_YOUR_PUBLISHABLE_KEY';
 
 export const initializeStripe = async () => {
   try {
@@ -21,3 +21,9 @@ export const SUBSCRIPTION_PRICES = {
   'standard': 'price_standard_monthly',
   'premium': 'price_premium_monthly',
 } as const;
+
+export default {
+  initializeStripe,
+  STRIPE_PUBLISHABLE_KEY,
+  SUBSCRIPTION_PRICES,
+};

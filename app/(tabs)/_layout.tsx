@@ -1,5 +1,6 @@
 import { Tabs } from 'expo-router';
 import { Chrome as Home, MessageSquare, Calendar, Users, Settings } from 'lucide-react-native';
+import { FontAwesome } from '@expo/vector-icons';
 
 export default function TabLayout() {
   return (
@@ -47,6 +48,13 @@ export default function TabLayout() {
         options={{
           title: 'Settings',
           tabBarIcon: ({ color, size }) => <Settings size={size} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="about"
+        options={{
+          title: 'About',
+          tabBarIcon: ({ color }) => <FontAwesome name="info-circle" size={24} color={color} />,
         }}
       />
     </Tabs>

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Pressable, Alert } from 'react-native';
 import { router } from 'expo-router';
 import { useAuthContext } from '../context/AuthContext';
-import { createUserWithEmail } from '../services/auth';
+import { signInWithEmail } from '../services/auth';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAppFonts, getPlatformFontFamily, createSafeStyles } from '../utils/fonts';
 
@@ -104,34 +104,28 @@ const createStyles = (fontsLoaded: boolean) => StyleSheet.create({
   },
 });
 
-export default function SignUpScreen() {
-  const { signUp } = useAuthContext();
+export default function SignInScreen() {
+  const { signIn } = useAuthContext();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
   const fontsLoaded = useAppFonts();
   const styles = createSafeStyles(fontsLoaded, createStyles);
 
-  const handleSignUp = async () => {
-    if (!email || !password || !confirmPassword) {
+  const handleSignIn = async () => {
+    if (!email || !password) {
       Alert.alert('Error', 'Please fill in all fields');
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      Alert.alert('Error', 'Passwords do not match');
       return;
     }
 
     setLoading(true);
     try {
-      await createUserWithEmail(email, password);
-      router.replace('/(auth)/assessment');
+      await signInWithEmail(email, password);
+      router.replace('/(tabs)');
     } catch (error) {
-      console.error('Sign up error:', error);
-      Alert.alert('Error', 'Failed to create account. Please try again.');
+      console.error('Sign in error:', error);
+      Alert.alert('Error', 'Failed to sign in. Please check your credentials.');
     } finally {
       setLoading(false);
     }
@@ -143,8 +137,8 @@ export default function SignUpScreen() {
       style={styles.container}
     >
       <View style={styles.content}>
-        <Text style={styles.title}>Create Account</Text>
-        <Text style={styles.subtitle}>Start your journey with us</Text>
+        <Text style={styles.title}>Welcome Back</Text>
+        <Text style={styles.subtitle}>Sign in to continue your journey</Text>
 
         <View style={styles.form}>
           <TextInput
@@ -164,22 +158,14 @@ export default function SignUpScreen() {
             onChangeText={setPassword}
             secureTextEntry
           />
-          <TextInput
-            style={styles.input}
-            placeholder="Confirm Password"
-            placeholderTextColor="rgba(255, 255, 255, 0.5)"
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-            secureTextEntry
-          />
 
           <Pressable
             style={[styles.button, loading && { opacity: 0.7 }]}
-            onPress={handleSignUp}
+            onPress={handleSignIn}
             disabled={loading}
           >
             <Text style={styles.buttonText}>
-              {loading ? 'Creating Account...' : 'Create Account'}
+              {loading ? 'Signing in...' : 'Sign In'}
             </Text>
           </Pressable>
 
@@ -199,12 +185,12 @@ export default function SignUpScreen() {
         </View>
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>Already have an account?</Text>
-          <Pressable onPress={() => router.push('/sign-in')}>
-            <Text style={styles.footerLink}>Sign In</Text>
+          <Text style={styles.footerText}>Don't have an account?</Text>
+          <Pressable onPress={() => router.push('/signup')}>
+            <Text style={styles.footerLink}>Sign Up</Text>
           </Pressable>
         </View>
       </View>
     </LinearGradient>
   );
-}
+} 

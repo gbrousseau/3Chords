@@ -1,45 +1,29 @@
-import Stripe from 'stripe';
+import { initializeApp } from 'firebase/app';
+import { getFunctions, httpsCallable } from 'firebase/functions';
 
-// Initialize Stripe with your secret key
-const stripe = new Stripe('your_stripe_secret_key', {
-  apiVersion: '2023-10-16',
-});
+const firebaseConfig = {
+  apiKey: "AIzaSyCJt8ianq3Mocuylsum4NhFmufe0-OwhEw",
+  authDomain: "chords-90522.firebaseapp.com",
+  projectId: "chords-90522",
+  storageBucket: "chords-90522.firebasestorage.app",
+  messagingSenderId: "85339006592",
+  appId: "1:85339006592:web:050a8d0d97da95c5bc2865",
+  measurementId: "G-8PY67P9LXR"
+};
 
-export const createSubscription = async (priceId: string, customerId?: string) => {
+const app = initializeApp(firebaseConfig);
+const functions = getFunctions(app);
+
+export const createSubscription = async (priceId: string) => {
   try {
-    // If no customer ID is provided, create a new customer
-    let customer = customerId;
-    if (!customer) {
-      const customerData = await stripe.customers.create();
-      customer = customerData.id;
-    }
-
-    // Create an ephemeral key for the customer
-    const ephemeralKey = await stripe.ephemeralKeys.create(
-      { customer: customer },
-      { apiVersion: '2023-10-16' }
-    );
-
-    // Create a subscription
-    const subscription = await stripe.subscriptions.create({
-      customer: customer,
-      items: [{ price: priceId }],
-      payment_behavior: 'default_incomplete',
-      payment_settings: { save_default_payment_method: 'on_subscription' },
-      expand: ['latest_invoice.payment_intent'],
-    });
-
-    const invoice = subscription.latest_invoice as Stripe.Invoice;
-    const paymentIntent = invoice.payment_intent as Stripe.PaymentIntent;
-
-    return {
-      subscription,
-      paymentIntent: paymentIntent.client_secret,
-      ephemeralKey: ephemeralKey.secret,
-      customer,
-    };
-  } catch (error) {
-    console.error('Error creating subscription:', error);
-    throw error;
+    const createSubscriptionFunction = httpsCallable(functions, 'createSubscription');
+    const result = await createSubscriptionFunction({ priceId });
+    return result.data as { clientSecret: string };
+  } catch (error: any) {
+    throw new Error(error.message);
   }
+};
+
+export default {
+  createSubscription,
 };

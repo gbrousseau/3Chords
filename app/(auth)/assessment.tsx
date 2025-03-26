@@ -1,381 +1,329 @@
-import { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Pressable, TextInput, Platform } from 'react-native';
-import { router } from 'expo-router';
+import { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, TextInput, Pressable, Alert } from 'react-native';
+import { router, useLocalSearchParams } from 'expo-router';
+import { useAuthContext } from '../context/AuthContext';
+import { createUserProfile, getUserProfile, updateUserProfile } from '../services/userProfile';
+import { AssessmentData } from '../types/user';
+import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { ArrowLeft, Info } from 'lucide-react-native';
+import { useAppFonts, getPlatformFontFamily, createSafeStyles } from '../utils/fonts';
 
 const coachingServices = [
-  {
-    id: 'career',
-    name: 'Career',
-    description: 'Guidance on career choices, job search strategies, and professional development.',
-  },
-  {
-    id: 'health',
-    name: 'Health and Wellness',
-    description: 'Support for achieving health goals, such as weight loss, fitness, and stress management.',
-  },
-  {
-    id: 'relationship',
-    name: 'Relationship',
-    description: 'Assistance with improving personal and professional relationships.',
-  },
-  {
-    id: 'financial',
-    name: 'Financial',
-    description: 'Advice on budgeting, saving, investing, and overall financial management.',
-  },
-  {
-    id: 'life-balance',
-    name: 'Life Balance',
-    description: 'Strategies for creating a balanced and fulfilling life.',
-  },
-  {
-    id: 'executive',
-    name: 'Executive',
-    description: 'Leadership development and performance enhancement for executives and managers.',
-  },
-  {
-    id: 'confidence',
-    name: 'Confidence',
-    description: 'Building self-esteem and confidence to achieve personal and professional goals.',
-  },
-  {
-    id: 'time',
-    name: 'Time Management',
-    description: 'Techniques for effective time management and productivity.',
-  },
-  {
-    id: 'stress',
-    name: 'Stress Management',
-    description: 'Coping strategies to manage and reduce stress.',
-  },
-  {
-    id: 'spiritual',
-    name: 'Spiritual',
-    description: 'Guidance on spiritual growth and finding inner peace.',
-  },
-  {
-    id: 'mindfulness',
-    name: 'Mindfulness',
-    description: 'Techniques to increase mindfulness and present-moment awareness.',
-  },
-  {
-    id: 'parenting',
-    name: 'Parenting',
-    description: 'Support for effective parenting strategies and improving family dynamics.',
-  },
-  {
-    id: 'motivation',
-    name: 'Motivation',
-    description: 'Techniques to stay motivated and achieve goals.',
-  },
-  {
-    id: 'personal',
-    name: 'Personal Development',
-    description: 'Focus on self-improvement and achieving one\'s potential.',
-  },
-  {
-    id: 'speaking',
-    name: 'Public Speaking',
-    description: 'Improving public speaking and communication skills.',
-  },
-  {
-    id: 'entrepreneurial',
-    name: 'Entrepreneurial',
-    description: 'Guidance for starting and growing a business.',
-  },
-  {
-    id: 'creativity',
-    name: 'Creativity',
-    description: 'Unleashing creativity and fostering innovation.',
-  },
-  {
-    id: 'retirement',
-    name: 'Retirement',
-    description: 'Planning for a fulfilling and purposeful retirement.',
-  },
-  {
-    id: 'purpose',
-    name: 'Life Purpose',
-    description: 'Discovering one\'s life purpose and passions.',
-  },
-  {
-    id: 'holistic',
-    name: 'Holistic Life',
-    description: 'Integrating all aspects of life for overall well-being.',
-  },
+  'Career Development',
+  'Leadership Skills',
+  'Personal Growth',
+  'Work-Life Balance',
+  'Communication Skills',
+  'Time Management',
+  'Stress Management',
+  'Goal Setting',
 ];
 
-export default function AssessmentScreen() {
-  const [selectedServices, setSelectedServices] = useState<string[]>([]);
-  const [hoveredService, setHoveredService] = useState<string | null>(null);
-  const [introduction, setIntroduction] = useState('');
-  const [description, setDescription] = useState('');
-
-  const toggleService = (serviceId: string) => {
-    setSelectedServices(prev => 
-      prev.includes(serviceId)
-        ? prev.filter(id => id !== serviceId)
-        : [...prev, serviceId]
-    );
-  };
-
-  const handleSubmit = () => {
-    // Handle form submission
-    console.log({
-      introduction,
-      description,
-      selectedServices,
-    });
-    // Navigate to next screen
-    router.push('/(tabs)');
-  };
-
-  return (
-    <ScrollView style={styles.container}>
-      <LinearGradient
-        colors={['#4F46E5', '#7C3AED']}
-        style={styles.header}
-      >
-        <View style={styles.headerContent}>
-          <Pressable
-            style={styles.backButton}
-            onPress={() => router.back()}
-          >
-            <ArrowLeft color="#ffffff" size={24} />
-          </Pressable>
-          <Text style={styles.title}>Personal Assessment</Text>
-        </View>
-      </LinearGradient>
-
-      <View style={styles.content}>
-        <View style={styles.congratsCard}>
-          <Text style={styles.congratsTitle}>Congratulations!</Text>
-          <Text style={styles.congratsText}>
-            You've taken the first step towards transforming your life. Let's get to know you better
-            to create your personalized coaching journey.
-          </Text>
-        </View>
-
-        <View style={styles.formSection}>
-          <Text style={styles.sectionTitle}>Tell Us About Yourself</Text>
-          
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Introduce Yourself</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Your name and what brings you here..."
-              value={introduction}
-              onChangeText={setIntroduction}
-              placeholderTextColor="#94A3B8"
-            />
-          </View>
-
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Describe Yourself</Text>
-            <TextInput
-              style={[styles.input, styles.textArea]}
-              placeholder="Share your goals, challenges, and what you hope to achieve..."
-              value={description}
-              onChangeText={setDescription}
-              multiline
-              numberOfLines={Platform.OS === 'ios' ? undefined : 4}
-              textAlignVertical="top"
-              placeholderTextColor="#94A3B8"
-            />
-          </View>
-        </View>
-
-        <View style={styles.servicesSection}>
-          <Text style={styles.sectionTitle}>Select Coaching Services</Text>
-          <Text style={styles.sectionSubtitle}>Choose the areas where you'd like to focus</Text>
-
-          <View style={styles.servicesGrid}>
-            {coachingServices.map((service) => (
-              <Pressable
-                key={service.id}
-                style={[
-                  styles.serviceButton,
-                  selectedServices.includes(service.id) && styles.serviceButtonSelected
-                ]}
-                onPress={() => toggleService(service.id)}
-                onHoverIn={() => setHoveredService(service.id)}
-                onHoverOut={() => setHoveredService(null)}
-              >
-                <Text
-                  style={[
-                    styles.serviceButtonText,
-                    selectedServices.includes(service.id) && styles.serviceButtonTextSelected
-                  ]}
-                >
-                  {service.name}
-                </Text>
-                {hoveredService === service.id && (
-                  <View style={styles.tooltip}>
-                    <Text style={styles.tooltipText}>{service.description}</Text>
-                  </View>
-                )}
-              </Pressable>
-            ))}
-          </View>
-        </View>
-
-        <Pressable
-          style={styles.submitButton}
-          onPress={handleSubmit}
-        >
-          <Text style={styles.submitButtonText}>Start Your Journey</Text>
-        </Pressable>
-      </View>
-    </ScrollView>
-  );
-}
-
-const styles = StyleSheet.create({
+const createStyles = (fontsLoaded: boolean) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
-  },
-  header: {
-    padding: 24,
-    paddingTop: 60,
-  },
-  headerContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  backButton: {
-    padding: 8,
-    marginRight: 16,
-  },
-  title: {
-    fontFamily: 'Inter-Bold',
-    fontSize: 24,
-    color: '#ffffff',
   },
   content: {
-    padding: 20,
+    flex: 1,
+    padding: 24,
+    justifyContent: 'center',
   },
-  congratsCard: {
-    backgroundColor: '#ffffff',
+  title: {
+    fontFamily: getPlatformFontFamily(fontsLoaded, 'bold'),
+    fontSize: 32,
+    color: '#ffffff',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontFamily: getPlatformFontFamily(fontsLoaded, 'medium'),
+    fontSize: 16,
+    color: '#E0E7FF',
+    textAlign: 'center',
+    marginBottom: 32,
+  },
+  form: {
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
     borderRadius: 16,
     padding: 24,
+  },
+  questionContainer: {
     marginBottom: 24,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
   },
-  congratsTitle: {
-    fontFamily: 'Inter-Bold',
-    fontSize: 24,
-    color: '#4F46E5',
-    marginBottom: 12,
-  },
-  congratsText: {
-    fontFamily: 'Inter-Regular',
-    fontSize: 16,
-    color: '#4B5563',
-    lineHeight: 24,
-  },
-  formSection: {
-    marginBottom: 32,
-  },
-  sectionTitle: {
-    fontFamily: 'Inter-SemiBold',
-    fontSize: 20,
-    color: '#1F2937',
+  question: {
+    fontFamily: getPlatformFontFamily(fontsLoaded, 'semiBold'),
+    fontSize: 18,
+    color: '#ffffff',
     marginBottom: 16,
   },
-  sectionSubtitle: {
-    fontFamily: 'Inter-Regular',
-    fontSize: 16,
-    color: '#6B7280',
-    marginBottom: 20,
+  optionsContainer: {
+    gap: 12,
   },
-  inputGroup: {
-    marginBottom: 20,
-  },
-  label: {
-    fontFamily: 'Inter-Medium',
-    fontSize: 14,
-    color: '#4B5563',
-    marginBottom: 8,
-  },
-  input: {
-    backgroundColor: '#ffffff',
-    borderWidth: 1,
-    borderColor: '#E5E7EB',
-    borderRadius: 12,
+  option: {
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderRadius: 8,
     padding: 16,
-    fontFamily: 'Inter-Regular',
+  },
+  optionText: {
+    fontFamily: getPlatformFontFamily(fontsLoaded, 'medium'),
     fontSize: 16,
-    color: '#1F2937',
+    color: '#ffffff',
   },
-  textArea: {
-    height: 120,
-    textAlignVertical: 'top',
+  selectedOption: {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
   },
-  servicesSection: {
-    marginBottom: 32,
+  button: {
+    backgroundColor: '#ffffff',
+    borderRadius: 8,
+    padding: 16,
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  buttonText: {
+    fontFamily: getPlatformFontFamily(fontsLoaded, 'semiBold'),
+    fontSize: 16,
+    color: '#4F46E5',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  editButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderRadius: 8,
+    padding: 8,
+  },
+  editButtonText: {
+    fontFamily: getPlatformFontFamily(fontsLoaded, 'semiBold', 'system'),
+    fontSize: 14,
+    color: '#ffffff',
+  },
+  section: {
+    marginBottom: 24,
+  },
+  sectionTitle: {
+    fontFamily: getPlatformFontFamily(fontsLoaded, 'semiBold'),
+    fontSize: 18,
+    color: '#ffffff',
+    marginBottom: 16,
   },
   servicesGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 12,
   },
-  serviceButton: {
-    backgroundColor: '#ffffff',
-    borderWidth: 1,
-    borderColor: '#E5E7EB',
-    borderRadius: 12,
-    padding: 12,
-    minWidth: '30%',
-    alignItems: 'center',
-    position: 'relative',
-  },
-  serviceButtonSelected: {
-    backgroundColor: '#4F46E5',
-    borderColor: '#4F46E5',
-  },
-  serviceButtonText: {
-    fontFamily: 'Inter-Medium',
-    fontSize: 14,
-    color: '#4B5563',
-    textAlign: 'center',
-  },
-  serviceButtonTextSelected: {
-    color: '#ffffff',
-  },
-  tooltip: {
-    position: 'absolute',
-    backgroundColor: '#1F2937',
-    padding: 12,
+  serviceCard: {
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
     borderRadius: 8,
-    width: 200,
-    top: '100%',
-    left: '50%',
-    transform: [{ translateX: -100 }],
-    marginTop: 8,
-    zIndex: 1000,
+    padding: 16,
+    width: '48%',
   },
-  tooltipText: {
-    fontFamily: 'Inter-Regular',
-    fontSize: 12,
+  serviceCardSelected: {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+  },
+  serviceCardReadOnly: {
+    opacity: 0.7,
+  },
+  serviceText: {
+    fontFamily: getPlatformFontFamily(fontsLoaded, 'medium'),
+    fontSize: 14,
     color: '#ffffff',
+  },
+  serviceTextSelected: {
+    color: '#4F46E5',
+  },
+  input: {
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderRadius: 8,
+    padding: 16,
+    color: '#ffffff',
+    fontFamily: getPlatformFontFamily(fontsLoaded, 'medium'),
+    fontSize: 16,
+  },
+  inputReadOnly: {
+    opacity: 0.7,
   },
   submitButton: {
     backgroundColor: '#4F46E5',
-    paddingVertical: 16,
-    borderRadius: 12,
+    borderRadius: 8,
+    padding: 16,
     alignItems: 'center',
-    marginTop: 16,
+    marginTop: 24,
   },
   submitButtonText: {
-    fontFamily: 'Inter-SemiBold',
+    fontFamily: getPlatformFontFamily(fontsLoaded, 'semiBold'),
     fontSize: 16,
     color: '#ffffff',
   },
 });
+
+export default function AssessmentScreen() {
+  const { user } = useAuthContext();
+  const { edit } = useLocalSearchParams();
+  const [isEditMode, setIsEditMode] = useState(edit === 'true');
+  const [isReadOnly, setIsReadOnly] = useState(!isEditMode);
+  const [loading, setLoading] = useState(true);
+  const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const [introduction, setIntroduction] = useState('');
+  const [description, setDescription] = useState('');
+
+  const fontsLoaded = useAppFonts();
+  const styles = createSafeStyles(fontsLoaded, createStyles);
+
+  useEffect(() => {
+    if (!isEditMode) {
+      loadUserProfile();
+    } else {
+      setLoading(false);
+    }
+  }, [isEditMode]);
+
+  const loadUserProfile = async () => {
+    if (!user) return;
+    
+    try {
+      const profile = await getUserProfile(user.uid);
+      if (profile) {
+        setSelectedServices(profile.selectedServices);
+        setIntroduction(profile.introduction);
+        setDescription(profile.description);
+      }
+    } catch (error) {
+      console.error('Error loading profile:', error);
+      Alert.alert('Error', 'Failed to load your profile');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const toggleService = (service: string) => {
+    if (isReadOnly) return;
+    
+    setSelectedServices(prev => {
+      if (prev.includes(service)) {
+        return prev.filter(s => s !== service);
+      }
+      return [...prev, service];
+    });
+  };
+
+  const handleSubmit = async () => {
+    if (!user) return;
+
+    try {
+      const assessmentData: AssessmentData = {
+        introduction,
+        description,
+        selectedServices,
+      };
+
+      if (isEditMode) {
+        await updateUserProfile(user.uid, assessmentData);
+        Alert.alert('Success', 'Your profile has been updated');
+      } else {
+        await createUserProfile(user.uid, user.email!, assessmentData);
+        Alert.alert('Success', 'Your profile has been created');
+      }
+
+      setIsReadOnly(true);
+      setIsEditMode(false);
+      router.replace('/(tabs)');
+    } catch (error) {
+      console.error('Error saving profile:', error);
+      Alert.alert('Error', 'Failed to save your profile');
+    }
+  };
+
+  const handleEdit = () => {
+    setIsReadOnly(false);
+    setIsEditMode(true);
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
+  return (
+    <ScrollView style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>Your Assessment</Text>
+        {isReadOnly && (
+          <Pressable style={styles.editButton} onPress={handleEdit}>
+            <Ionicons name="pencil" size={20} color="#ffffff" />
+            <Text style={styles.editButtonText}>Edit</Text>
+          </Pressable>
+        )}
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Select Your Coaching Services</Text>
+        <View style={styles.servicesGrid}>
+          {coachingServices.map((service) => (
+            <Pressable
+              key={service}
+              style={[
+                styles.serviceCard,
+                selectedServices.includes(service) && styles.serviceCardSelected,
+                isReadOnly && styles.serviceCardReadOnly,
+              ]}
+              onPress={() => toggleService(service)}
+              disabled={isReadOnly}
+            >
+              <Text
+                style={[
+                  styles.serviceText,
+                  selectedServices.includes(service) && styles.serviceTextSelected,
+                ]}
+              >
+                {service}
+              </Text>
+            </Pressable>
+          ))}
+        </View>
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Introduction</Text>
+        <TextInput
+          style={[styles.input, isReadOnly && styles.inputReadOnly]}
+          value={introduction}
+          onChangeText={setIntroduction}
+          placeholder="Tell us about yourself..."
+          multiline
+          numberOfLines={4}
+          editable={!isReadOnly}
+        />
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>What You Want to Achieve</Text>
+        <TextInput
+          style={[styles.input, isReadOnly && styles.inputReadOnly]}
+          value={description}
+          onChangeText={setDescription}
+          placeholder="Describe your goals and what you want to achieve..."
+          multiline
+          numberOfLines={6}
+          editable={!isReadOnly}
+        />
+      </View>
+
+      {!isReadOnly && (
+        <Pressable style={styles.submitButton} onPress={handleSubmit}>
+          <Text style={styles.submitButtonText}>
+            {isEditMode ? 'Save Changes' : 'Submit Assessment'}
+          </Text>
+        </Pressable>
+      )}
+    </ScrollView>
+  );
+}

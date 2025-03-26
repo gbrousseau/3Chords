@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable, Image } from 'react-native';
 import { Link } from 'expo-router';
-import { BookOpen, Calendar, Clock, FileText, CircleHelp as HelpCircle, Info, MessageSquare, Mic, Search, Star, Target, Users, Video } from 'lucide-react-native';
+import { BookOpen, Calendar, Clock, FileText, CircleHelp as HelpCircle, Info, MessageSquare, Mic, Search, Star, Target, Users, Video, Edit2 } from 'lucide-react-native';
 
 export default function HomeScreen() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -22,25 +22,25 @@ export default function HomeScreen() {
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Quick Access</Text>
         <View style={styles.quickGrid}>
-          <Link href="/rooms" asChild>
+          <Link href="./rooms" asChild>
             <Pressable style={styles.quickCard}>
               <MessageSquare size={24} color="#4F46E5" />
               <Text style={styles.quickText}>Coaching Rooms</Text>
             </Pressable>
           </Link>
-          <Link href="/accountability" asChild>
+          <Link href="./accountability" asChild>
             <Pressable style={styles.quickCard}>
               <Clock size={24} color="#4F46E5" />
               <Text style={styles.quickText}>Accountability</Text>
             </Pressable>
           </Link>
-          <Link href="/videos" asChild>
+          <Link href="./videos" asChild>
             <Pressable style={styles.quickCard}>
               <Video size={24} color="#4F46E5" />
               <Text style={styles.quickText}>Topic Videos</Text>
             </Pressable>
           </Link>
-          <Link href="/events" asChild>
+          <Link href="./events" asChild>
             <Pressable style={styles.quickCard}>
               <Calendar size={24} color="#4F46E5" />
               <Text style={styles.quickText}>Live Events</Text>
@@ -52,25 +52,32 @@ export default function HomeScreen() {
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Your Journey</Text>
         <View style={styles.journeyGrid}>
-          <Link href="/journal" asChild>
+          <Link href="./journal" asChild>
             <Pressable style={styles.journeyCard}>
               <BookOpen size={24} color="#4F46E5" />
               <Text style={styles.cardTitle}>Journey Journal</Text>
               <Text style={styles.cardSubtext}>Document your growth</Text>
             </Pressable>
           </Link>
-          <Link href="/assignments" asChild>
+          <Link href="./assignments" asChild>
             <Pressable style={styles.journeyCard}>
               <FileText size={24} color="#4F46E5" />
               <Text style={styles.cardTitle}>Assignments</Text>
               <Text style={styles.cardSubtext}>Track your progress</Text>
             </Pressable>
           </Link>
-          <Link href="/goals" asChild>
+          <Link href="./goals" asChild>
             <Pressable style={styles.journeyCard}>
               <Target size={24} color="#4F46E5" />
               <Text style={styles.cardTitle}>Goal Tracker</Text>
               <Text style={styles.cardSubtext}>Set & achieve goals</Text>
+            </Pressable>
+          </Link>
+          <Link href="/(auth)/assessment?edit=true" asChild>
+            <Pressable style={styles.journeyCard}>
+              <Edit2 size={24} color="#4F46E5" />
+              <Text style={styles.cardTitle}>Edit Assessment</Text>
+              <Text style={styles.cardSubtext}>Update your profile</Text>
             </Pressable>
           </Link>
         </View>
@@ -79,7 +86,7 @@ export default function HomeScreen() {
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Community</Text>
         <View style={styles.communityGrid}>
-          <Link href="/search" asChild>
+          <Link href="./search" asChild>
             <Pressable style={styles.communityCard}>
               <Search size={24} color="#4F46E5" />
               <Text style={styles.cardTitle}>Profile Search</Text>
@@ -89,7 +96,7 @@ export default function HomeScreen() {
               </View>
             </Pressable>
           </Link>
-          <Link href="/shoutouts" asChild>
+          <Link href="./shoutouts" asChild>
             <Pressable style={styles.communityCard}>
               <Star size={24} color="#4F46E5" />
               <Text style={styles.cardTitle}>Shoutout Corner</Text>
@@ -99,7 +106,7 @@ export default function HomeScreen() {
               </View>
             </Pressable>
           </Link>
-          <Link href="/testimonials" asChild>
+          <Link href="./testimonials" asChild>
             <Pressable style={styles.communityCard}>
               <Users size={24} color="#4F46E5" />
               <Text style={styles.cardTitle}>Testimonials</Text>
@@ -112,21 +119,21 @@ export default function HomeScreen() {
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Resources</Text>
         <View style={styles.resourcesGrid}>
-          <Link href="/speaker-request" asChild>
+          <Link href="./speaker-request" asChild>
             <Pressable style={styles.resourceCard}>
               <Mic size={24} color="#4F46E5" />
               <Text style={styles.cardTitle}>Speaker Request</Text>
               <Text style={styles.cardSubtext}>Book a speaker</Text>
             </Pressable>
           </Link>
-          <Link href="/help" asChild>
+          <Link href="./help" asChild>
             <Pressable style={styles.resourceCard}>
               <HelpCircle size={24} color="#4F46E5" />
               <Text style={styles.cardTitle}>Help & Support</Text>
               <Text style={styles.cardSubtext}>Get assistance</Text>
             </Pressable>
           </Link>
-          <Link href="/about" asChild>
+          <Link href="./about" asChild>
             <Pressable style={styles.resourceCard}>
               <Info size={24} color="#4F46E5" />
               <Text style={styles.cardTitle}>About Us</Text>

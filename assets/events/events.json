@@ -1,0 +1,42 @@
+[
+  {
+    "id": "1",
+    "title": "Leadership Development Workshop",
+    "description": "Join us for an interactive workshop on developing essential leadership skills. Learn about communication, decision-making, and team management.",
+    "date": "2024-03-20",
+    "time": "10:00 AM",
+    "duration": "2 hours",
+    "speaker": "Dr. Emily Richardson",
+    "type": "workshop"
+  },
+  {
+    "id": "2",
+    "title": "Career Growth Webinar",
+    "description": "Discover strategies for career advancement and professional development in today's competitive market.",
+    "date": "2024-03-22",
+    "time": "2:00 PM",
+    "duration": "1 hour",
+    "speaker": "Marcus Johnson",
+    "type": "webinar"
+  },
+  {
+    "id": "3",
+    "title": "Personal Branding Coaching",
+    "description": "One-on-one coaching session focused on building and maintaining a strong personal brand.",
+    "date": "2024-03-25",
+    "time": "11:00 AM",
+    "duration": "45 minutes",
+    "speaker": "Sarah Chen",
+    "type": "coaching"
+  },
+  {
+    "id": "4",
+    "title": "Mindset Mastery Workshop",
+    "description": "Learn techniques for developing a growth mindset and overcoming limiting beliefs.",
+    "date": "2024-03-28",
+    "time": "3:00 PM",
+    "duration": "2 hours",
+    "speaker": "Dr. Emily Richardson",
+    "type": "workshop"
+  }
+] 

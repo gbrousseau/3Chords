@@ -1,37 +1,52 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useFonts, Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
 import { SplashScreen } from 'expo-router';
+import { StripeProvider } from '@stripe/stripe-react-native';
+import { AuthProvider } from './context/AuthContext';
+import { STRIPE_PUBLISHABLE_KEY, initializeStripe } from './utils/stripe';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { Platform } from 'react-native';
+import { useAppFonts } from './utils/fonts';
+
+// Initialize Reanimated
+if (Platform.OS !== 'web') {
+  require('react-native-reanimated').setUpDevelopmentMode(true);
+}
 
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const [fontsLoaded, fontError] = useFonts({
-    'Inter-Regular': Inter_400Regular,
-    'Inter-Medium': Inter_500Medium,
-    'Inter-SemiBold': Inter_600SemiBold,
-    'Inter-Bold': Inter_700Bold,
-  });
+  const [fontsError, setFontsError] = useState(false);
+  const fontsLoaded = useAppFonts();
 
   useEffect(() => {
-    if (fontsLoaded || fontError) {
+    if (fontsLoaded || fontsError) {
       SplashScreen.hideAsync();
     }
-  }, [fontsLoaded, fontError]);
+  }, [fontsLoaded, fontsError]);
 
-  if (!fontsLoaded && !fontError) {
+  useEffect(() => {
+    initializeStripe();
+  }, []);
+
+  // If fonts failed to load, we'll still render the app with system fonts
+  if (!fontsLoaded && !fontsError) {
     return null;
   }
 
   return (
-    <>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />
-        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      </Stack>
-      <StatusBar style="light" />
-    </>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <AuthProvider>
+        <StripeProvider publishableKey={STRIPE_PUBLISHABLE_KEY}>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="(onboarding)" />
+            <Stack.Screen name="(auth)" />
+            <Stack.Screen name="(tabs)" />
+          </Stack>
+          <StatusBar style="light" />
+        </StripeProvider>
+      </AuthProvider>
+    </GestureHandlerRootView>
   );
 }

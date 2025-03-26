@@ -2,13 +2,13 @@ import { useState, useRef } from 'react';
 import { View, Text, StyleSheet, Dimensions, Pressable, Image } from 'react-native';
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import Animated, { 
+import Animated, {
   FadeIn,
   FadeOut,
   SlideInRight,
-  SlideOutLeft 
+  SlideOutLeft
 } from 'react-native-reanimated';
-import { Video } from 'expo-av';
+import { Video, ResizeMode } from 'expo-av';
 
 const { width } = Dimensions.get('window');
 
@@ -18,7 +18,7 @@ const slides = [
     title: 'Welcome to 3 Cords Coaching',
     description: 'Your journey to personal and professional growth starts here. We believe in the power of connection, guidance, and transformation.',
     image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2940&auto=format&fit=crop',
-    gradient: ['#4F46E5', '#7C3AED'],
+    gradient: ['#4F46E5', '#7C3AED'] as const,
   },
   {
     id: 'platform',
@@ -39,7 +39,7 @@ const slides = [
         avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=100&auto=format&fit=crop',
       },
     ],
-    gradient: ['#3730A3', '#6366F1'],
+    gradient: ['#3730A3', '#6366F1'] as const,
   },
   {
     id: 'founder',
@@ -48,7 +48,7 @@ const slides = [
     founderTitle: 'Founder & CEO',
     message: 'At 3 Cords Coaching, we believe that everyone has untapped potential waiting to be discovered. Our pledge is to provide world-class coaching that transforms lives, builds leaders, and creates lasting impact.',
     founderImage: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=1000&auto=format&fit=crop',
-    gradient: ['#1E40AF', '#3B82F6'],
+    gradient: ['#1E40AF', '#3B82F6'] as const,
   },
 ];
 
@@ -60,7 +60,7 @@ export default function OnboardingScreen() {
     if (currentIndex < slides.length - 1) {
       setCurrentIndex(currentIndex + 1);
     } else {
-      router.replace('/(auth)/');
+      router.replace('/(auth)/payment');
     }
   };
 
@@ -68,7 +68,7 @@ export default function OnboardingScreen() {
     const slide = slides[currentIndex];
 
     return (
-      <Animated.View 
+      <Animated.View
         key={slide.id}
         entering={SlideInRight}
         exiting={SlideOutLeft}
@@ -91,13 +91,13 @@ export default function OnboardingScreen() {
                 ref={videoRef}
                 source={{ uri: 'https://assets.mixkit.co/videos/preview/mixkit-business-team-meeting-in-an-office-4819-large.mp4' }}
                 style={styles.video}
-                resizeMode="cover"
+                resizeMode={ResizeMode.COVER}
                 isLooping
                 isMuted
                 shouldPlay
               />
               <View style={styles.testimonials}>
-                {slide.testimonials.map((testimonial, index) => (
+                {slide.testimonials?.map((testimonial, index) => (
                   <Animated.View
                     key={testimonial.name}
                     entering={FadeIn.delay(index * 500)}
