@@ -1,4 +1,4 @@
-package com.yourcompany.threechords
+package com.hamhammer.threechords
 import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build

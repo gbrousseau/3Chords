@@ -1,4 +1,4 @@
-package com.yourcompany.threechords
+package com.hamhammer.threechords
 
 import android.app.Application
 import android.content.res.Configuration

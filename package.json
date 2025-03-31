@@ -5,12 +5,17 @@
   "private": true,
   "scripts": {
     "clean": "expo start -c",
-    "dev": "expo start --tunnel",
+    "dev": "npx expo prebuild --clean && expo start --go --tunnel",
     "build:web": "expo export --platform web",
     "lint": "expo lint",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
-    "android": "expo run:android",
-    "ios": "expo run:ios"
+    "android": "npx expo prebuild --clean && expo run:android",
+    "ios": "npx expo prebuild --clean && expo run:ios",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "prebuild": "expo prebuild --clean",
+    "start": "expo start --clear"
   },
   "dependencies": {
     "@expo-google-fonts/inter": "^0.2.3",
@@ -25,10 +30,12 @@
     "@react-native-firebase/storage": "^21.12.2",
     "@react-navigation/bottom-tabs": "^7.2.0",
     "@react-navigation/native": "^7.0.14",
+    "@react-navigation/native-stack": "^7.2.0",
     "@stripe/stripe-react-native": "0.38.6",
+    "ajv": "^8.17.1",
     "crypto-browserify": "^3.12.1",
     "date-fns": "2.30.0",
-    "expo": "~52.0.38",
+    "expo": "^52.0.41",
     "expo-apple-authentication": "^7.1.3",
     "expo-auth-session": "~6.0.3",
     "expo-av": "~15.0.2",
@@ -41,7 +48,7 @@
     "expo-haptics": "^14.0.1",
     "expo-linear-gradient": "^14.0.2",
     "expo-linking": "^7.0.5",
-    "expo-router": "~4.0.19",
+    "expo-router": "^4.0.19",
     "expo-splash-screen": "^0.29.21",
     "expo-status-bar": "^2.0.1",
     "expo-symbols": "^0.2.2",
@@ -52,7 +59,7 @@
     "prettier": "^3.5.3",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "react-native": "0.76.7",
+    "react-native": "0.76.8",
     "react-native-gesture-handler": "~2.20.2",
     "react-native-reanimated": "~3.16.1",
     "react-native-safe-area-context": "4.12.0",
@@ -67,14 +74,31 @@
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
-    "@types/react": "^19.0.12",
-    "@types/react-native": "^0.73.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/jest-native": "^5.4.3",
+    "@testing-library/react-native": "^13.2.0",
+    "@types/jest": "^29.5.14",
+    "@types/react": "~18.3.12",
+    "@types/react-test-renderer": "^19.0.0",
     "babel-plugin-module-resolver": "^5.0.2",
     "cross-env": "^7.0.3",
     "eslint": "^8.57.1",
     "eslint-config-expo": "~8.0.1",
     "eslint-config-universe": "^14.0.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jest-expo": "^52.0.6",
     "react-native-dotenv": "^3.4.11",
+    "react-test-renderer": "^19.1.0",
+    "ts-jest": "^29.3.0",
     "typescript": "^5.3.3"
+  },
+  "expo": {
+    "doctor": {
+      "reactNativeDirectoryCheck": {
+        "exclude": ["@stripe/stripe-react-native", "lucide-react-native"],
+        "listUnknownPackages": false
+      }
+    }
   }
 }
