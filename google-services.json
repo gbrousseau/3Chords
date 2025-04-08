@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "85339006592",
+    "project_id": "chords-90522",
+    "storage_bucket": "chords-90522.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:85339006592:android:0056300cf31d2d79bc2865",
+        "android_client_info": {
+          "package_name": "com.hammer.threechords"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "85339006592-e3gltpi9kunsa2mfff3sam9elm1p3a2d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDb05sGOEtttlDiyvCYUQR02QYISZyDUYE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "85339006592-e3gltpi9kunsa2mfff3sam9elm1p3a2d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
