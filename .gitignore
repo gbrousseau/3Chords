@@ -1,5 +1,7 @@
 # dependencies
 node_modules/
+.pnp/
+.pnp.js
 
 # expo
 .expo/
@@ -22,13 +24,68 @@ expo-env.d.ts
 npm-debug.*
 yarn-debug.*
 yarn-error.*
+.idea
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
 
-# macos
+# macOS
 .DS_Store
 *.pem
 
-# local env files
-.env*.local
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
 
-# typescript
+# iOS
+ios/build/
+ios/Pods/
+ios/Podfile.lock
+
+# Android
+android/app/build/
+android/app/debug/
+android/app/release/
+android/build/
+android/captures/
+android/gradle/
+android/local.properties
+android/.gradle/
+
+# testing
+/coverage
+/__tests__/__snapshots__/
+/__tests__/fixtures/
+
+# environment variables
+.env
+.env.*
+!.env.example
+
+# firebase
+firebase-debug.log
+firebase-debug.*.log
+firebase_config.json
+GoogleService-Info.plist
+google-services.json
+
+# build outputs
+*.aab
+*.apk
+*.ipa
+
+# misc
+.DS_Store
+*.log
+logs/
+*.log.*
+.vercel
+.next
+.serverless
+tmp/
+temp/
+eas.json
+
+# TypeScript
 *.tsbuildinfo
